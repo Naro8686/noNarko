@@ -33,7 +33,7 @@
     }
 
     section.slider .slider__text-block {
-        margin: 15px auto;
+        margin-top: 15px;
     }
 }
 
@@ -43,7 +43,7 @@
     }
 
     section.slider .slider__text-block {
-        margin: 31px auto;
+        margin-top: 31px;
     }
 
     .request-form {
@@ -610,6 +610,10 @@
 
     footer ul {
         line-height: 25px;
+    }
+
+    footer li {
+        font-size: 12px;
     }
 
     footer a, footer a:hover {

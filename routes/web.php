@@ -14,18 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'HomeController@index')->name('home');
-Route::get('/faq', 'HomeController@faq')->name('faq');
-Route::get('/abc', 'HomeController@abc')->name('abc');
-Route::get('/blog', 'HomeController@blog')->name('blog');
-Route::get('/news', 'HomeController@news')->name('news');
-Route::get('/about', 'HomeController@about')->name('about');
-Route::get('/cases', 'HomeController@cases')->name('cases');
-Route::get('/prices', 'HomeController@prices')->name('prices');
-Route::get('/services', 'HomeController@services')->name('services');
-Route::get('/requests', 'HomeController@requests')->name('requests');
-Route::get('/contacts', 'HomeController@contacts')->name('contacts');
-Route::get('/write-to-doctor', 'HomeController@writeToDoctor')->name('writeToDoctor');
-Route::get('/treatment-program', 'HomeController@treatmentProgram')->name('treatmentProgram');
+foreach (pages()->where('slug', '<>', null) as $page) {
+    Route::get($page->slug, "HomeController@$page->name")->name($page->name);
+}
 
 Auth::routes(['register' => false, 'verify' => true]);

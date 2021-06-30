@@ -2,13 +2,9 @@
 
 @section('content')
     <div class="container treatment_program">
-        <ol class="history d-none d-lg-flex">
-            <li><a href="{{route('home')}}">Главная</a></li>
-            <li>О программе лечения</li>
-        </ol>
-        <h1 class="title mt-100">О программе лечения</h1>
-        <p class="desc"> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
-            the industry's standard dummy text ever since the.</p>
+        @include('include.pageHistory')
+        <h1 class="title mt-100">{{$page->title}}</h1>
+        <div class="desc">{!! $page->body !!}</div>
         <div class="treatment-stages-block">
             <ul class="timeline">
                 <li>
@@ -266,5 +262,5 @@
             </ul>
         </div>
     </div>
-    @include('include.seoText')
+    @include('include.seoText',['text' => $page->seoText, 'body' => $page->seoBody])
 @endsection

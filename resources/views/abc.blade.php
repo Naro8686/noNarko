@@ -2,13 +2,9 @@
 
 @section('content')
     <div class="container abc">
-        <ol class="history d-none d-lg-flex">
-            <li><a href="{{route('home')}}">Главная</a></li>
-            <li>Азбука наркомана</li>
-        </ol>
-        <h1 class="title mt-4">Азбука наркомана</h1>
-        <p class="desc"> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
-            the industry's standard dummy text ever since the.</p>
+        @include('include.pageHistory')
+        <h1 class="title mt-4">{{$page->title}}</h1>
+        <div class="desc">{!! $page->body !!}</div>
         <div class="flexbox mt-5">
             <div class="box flex-column">
                 <label class="abc-search">
@@ -242,5 +238,5 @@
             </div>
         </div>
     </div>
-    @include('include.seoText')
+    @include('include.seoText',['text' => $page->seoText, 'body' => $page->seoBody])
 @endsection

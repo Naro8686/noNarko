@@ -1,7 +1,12 @@
 /node_modules
 /public/hot
 /public/storage
+/public/img/slider/*
+/public/img/pages/about/*
+!/public/img/slider/coworkers.svg
+!/public/img/pages/about/default.png
 /storage/*.key
+/storage/debugbar/*
 /vendor
 .env
 .env.backup
@@ -13,3 +18,5 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+_ide_helper.php
+.phpstorm.meta.php

@@ -14,3 +14,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'HomeController@dashboard')->name('dashboard');
+Route::resource('/slider', 'SliderController');
+Route::resource('/meta', 'MetaController')->only(['update']);
+
+Route::prefix('pages')->name('pages.')->group(function () {
+    Route::put( "/update/{id}", "PagesController@update")->name('update');
+    foreach (pages() as $page) {
+        Route::match(['GET', 'PUT'], "/$page->name", "PagesController@$page->name")->name($page->name);
+    }
+});
+
+Route::post('/ckeditor/upload', 'CKEditorController@upload')->name('ckeditor.image-upload');

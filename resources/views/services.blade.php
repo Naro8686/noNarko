@@ -2,10 +2,7 @@
 
 @section('content')
     <div class="container services">
-        <ol class="history d-none d-lg-flex">
-            <li><a href="{{route('home')}}">Главная</a></li>
-            <li>Лечение алкоголизма</li>
-        </ol>
+        @include('include.pageHistory')
         <div class="flexbox mt-100">
             <div class="box d-none d-lg-block"><h2 class="text-uppercase">Выберите тип услуги</h2></div>
             <div class="box"><h1 class="mb-sm-5 mb-lg-0 mb-0 w-75">Лечение Алкоголизма</h1></div>
@@ -277,5 +274,5 @@
             </div>
         </div>
     </div>
-    @include('include.seoText')
+    @include('include.seoText',['text' => $page->seoText, 'body' => $page->seoBody])
 @endsection

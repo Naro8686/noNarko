@@ -1,0 +1,9 @@
+table td{
+    vertical-align:middle !important;
+    text-align: center;
+}
+table img{
+    width: 75px !important;
+    height: 75px !important;
+    object-fit: cover;
+}

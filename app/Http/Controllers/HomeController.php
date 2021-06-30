@@ -2,11 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contact;
+use App\Models\Page;
+use App\Models\Slider;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index()
+    public $page = null;
+
+    public function __construct()
+    {
+        try {
+            $this->page = page(\request()->route()->getName());
+            if (!$this->page->exists) abort(404);
+        }catch (\Throwable $exception){
+            $this->page = new Page();
+        }
+        view()->share([
+            'sliders' => Slider::get(),
+            'contacts' => Contact::firstOrNew(),
+            'seo' => $this->page->seo(),
+            'page' => $this->page
+        ]);
+    }
+
+    public function home()
     {
         return view('home');
     }
@@ -26,7 +47,8 @@ class HomeController extends Controller
         return view('blog');
     }
 
-    public function abc(){
+    public function abc()
+    {
         return view('abc');
     }
 
@@ -39,6 +61,7 @@ class HomeController extends Controller
     {
         return view('services');
     }
+
     public function requests()
     {
         return view('requests');
@@ -58,10 +81,14 @@ class HomeController extends Controller
     {
         return view('prices');
     }
-    public function treatmentProgram(){
+
+    public function treatmentProgram()
+    {
         return view('treatmentProgram');
     }
-    public function writeToDoctor(){
+
+    public function writeToDoctor()
+    {
         return view('writeToDoctor');
     }
 }
