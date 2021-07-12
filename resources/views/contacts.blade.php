@@ -79,5 +79,5 @@
             src="https://yandex.ru/map-widget/v1/?um=constructor%3A311dd334563dfa800bb889d88ea9785ddbaea2fd48bc35571b4d49ad03fe0e3c&amp;source=constructor"
             width="1236" height="350" frameborder="0"></iframe>
     </div>
-    @include('include.seoText',['text' => $page->seoText, 'body' => $page->seoBody])
+    @include('include.seoText',['text' => $page->seo->text, 'body' => $page->seo->body])
 @endsection

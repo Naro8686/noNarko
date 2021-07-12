@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\Page;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PageRequest extends FormRequest
@@ -13,7 +14,7 @@ class PageRequest extends FormRequest
      */
     public function authorize()
     {
-        return \Auth::check();
+        return auth()->check();
     }
 
     /**
@@ -23,10 +24,14 @@ class PageRequest extends FormRequest
      */
     public function rules()
     {
-        $table = $this->has('page.table') ? $this->input('page.table') : 'pages';
-        $id = (int)$this->input('page.id');
+        $page = Page::find($this->input('page.id'));
         return [
-            'page.title' => ["required", "unique:$table,title,$id", "max:255"],
+            'page.id' => ["sometimes"],
+            'page.desc' => ["sometimes", "nullable", "string", "max:255"],
+            'page.title' => [(!is_null($page) && $page->name === 'home') ? "sometimes" : "required", "max:255"],
+            'page.services' => ["sometimes", "array"],
+            'page.advantages' => ["sometimes", "array"],
+            'page.blog' => ["sometimes", "array"],
             'page.body' => ["nullable"],
             'page.file' => ['sometimes', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ];

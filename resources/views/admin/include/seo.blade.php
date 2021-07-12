@@ -7,15 +7,16 @@
                     {{__('Seo')}}
                 </button>
             </div>
-            <div id="collapseSeo" class="collapse @if($errors->has('seo.slug') || $errors->has('seo.title') || $errors->has('seo.description') || $errors->has('seo.keywords')  || $errors->has('seo.text') || $errors->has('seo.body')) show @endif" aria-labelledby="headingSeo" data-parent="#accordionSeo">
+            <div id="collapseSeo"
+                 class="collapse @if($errors->has('seo.slug') || $errors->has('seo.title') || $errors->has('seo.description') || $errors->has('seo.keywords')  || $errors->has('seo.text') || $errors->has('seo.body')) show @endif"
+                 aria-labelledby="headingSeo" data-parent="#accordionSeo">
                 <div class="card-body">
-                    <form class="col-md-12" action="{{route('admin.meta.update',$seo->id)}}" method="POST">
+                    <form class="col-md-12" action="{{route('admin.seo.update',$seo->id)}}" method="POST">
                         @method('PUT')
                         @csrf
                         <input type="hidden" value="{{$seo->id}}" name="seo[id]">
-                        <input type="hidden" value="pages" name="seo[table]">
                         <div class="form-group row">
-                            <label for="inputSlug" class="col-md-2 col-form-label">{{url('/')}}</label>
+                            <label for="inputSlug" class="col-md-2 col-form-label">{{url('/')}}/</label>
                             <div class="col-md-10">
                                 <input name="seo[slug]" value="{{old('seo.slug') ?? $seo->slug}}" type="text"
                                        class="form-control @error('seo.slug') is-invalid @enderror" id="inputSlug"

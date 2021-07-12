@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    @include('admin.include.meta',['seo' => $page->seo()])
+    @include('admin.include.seo',['seo' => $page->seo])
     @include('admin.include.content')
     <div class="container-fluid mt-5">
         <form class="col-md-12" action="{{ route('admin.pages.contacts') }}" method="POST"

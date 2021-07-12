@@ -39,25 +39,27 @@
             </div>
             <ul class="d-lg-flex d-none">
                 <li><a @if(request()->routeIs('home')) class="active"
-                       @endif href="{{page('home')->url()}}">{{page('home')->seoTitle}}</a></li>
+                       @endif href="{{page('home')->url()}}">{{page('home')->seo->title}}</a></li>
                 <li><a @if(request()->routeIs('about')) class="active"
-                       @endif href="{{page('about')->url()}}">{{page('about')->seoTitle}}</a></li>
+                       @endif href="{{page('about')->url()}}">{{page('about')->seo->title}}</a></li>
                 <li><a @if(request()->routeIs('blog')) class="active"
-                       @endif href="{{page('blog')->url()}}">{{page('blog')->seoTitle}}</a></li>
+                       @endif href="{{page('blog')->url()}}">{{page('blog')->seo->title}}</a></li>
                 <li><a @if(request()->routeIs('faq')) class="active"
-                       @endif href="{{page('faq')->url()}}">{{page('faq')->seoTitle}}</a></li>
+                       @endif href="{{page('faq')->url()}}">{{page('faq')->seo->title}}</a></li>
                 <li><a @if(request()->routeIs('contacts')) class="active"
-                       @endif href="{{page('contacts')->url()}}">{{page('contacts')->seoTitle}}</a></li>
+                       @endif href="{{page('contacts')->url()}}">{{page('contacts')->seo->title}}</a></li>
             </ul>
             <div class="menu d-lg-flex d-none">
-                <label class="search-head-lg">
+                <label class="search-head-lg position-relative">
                     <img class="mr-1" alt="search" src="{{asset('img/icon/search.svg')}}">
-                    <input type="text" placeholder="поиск">
+                    <input autocomplete="off" type="search" name="q" id="search" placeholder="поиск">
+                    <div class="search-list close"></div>
                 </label>
-                <a href="{{page('writeToDoctor')->url()}}" class="appButton">{{page('writeToDoctor','seoTitle')}}</a>
+                <a href="{{page('writeToDoctor')->url()}}" class="appButton">{{page('writeToDoctor')->seo->title}}</a>
             </div>
             <div class="menu-mobile">
-                <button class="search-2">
+                <button class="search-2"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <img alt="search" src="{{asset('img/icon/search-2.svg')}}">
                 </button>
                 <button class="navbar-button" type="button" data-toggle="collapse" data-target="#navbarMenu"
@@ -66,28 +68,37 @@
                     <span></span>
                     <span></span>
                 </button>
+                <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                     aria-labelledby="searchDropdown">
+                    <input
+                        autocomplete="off" type="search" name="q" id="search-mob" placeholder="поиск"
+                        class="form-control bg-light border-0 small"
+                        aria-label="Search"
+                        aria-describedby="basic-addon2">
+                    <div class="search-list search-list-mob close"></div>
+                </div>
             </div>
         </div>
     </div>
 </header>
 <section class="collapse navbar-collapse" id="navbarMenu">
     <ul class="nav navbar-nav p-2">
-        <li><a href="{{page('services')->url()}}">{{page('services','seoTitle')}}</a></li>
-        <li><a href="{{page('treatmentProgram')->url()}}">{{page('treatmentProgram','seoTitle')}}</a></li>
-        <li><a href="{{page('abc')->url()}}">{{page('abc','seoTitle')}}</a></li>
-        <li><a href="{{page('cases')->url()}}">{{page('cases','seoTitle')}}</a></li>
-        <li><a href="{{page('requests')->url()}}"{{page('requests','seoTitle')}}</a></li>
+        <li><a href="{{page('services')->url()}}">{{page('services')->seo->title}}</a></li>
+        <li><a href="{{page('treatmentProgram')->url()}}">{{page('treatmentProgram')->seo->title}}</a></li>
+        <li><a href="{{page('abc')->url()}}">{{page('abc')->seo->title}}</a></li>
+        <li><a href="{{page('cases')->url()}}">{{page('cases')->seo->title}}</a></li>
+        <li><a href="{{page('requests')->url()}}">{{page('requests')->seo->title}}</a></li>
     </ul>
 </section>
 <section class="map d-lg-flex d-none">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center">
             <ul>
-                <li><a href="{{page('services')->url()}}">{{page('services','seoTitle')}}</a></li>
-                <li><a href="{{page('treatmentProgram')->url()}}">{{page('treatmentProgram','seoTitle')}}</a></li>
-                <li><a href="{{page('abc')->url()}}">{{page('abc','seoTitle')}}</a></li>
-                <li><a href="{{page('cases')->url()}}">{{page('cases','seoTitle')}}</a></li>
-                <li><a href="{{page('requests')->url()}}"{{page('requests','seoTitle')}}</a></li>
+                <li><a href="{{page('services')->url()}}">{{page('services')->seo->title}}</a></li>
+                <li><a href="{{page('treatmentProgram')->url()}}">{{page('treatmentProgram')->seo->title}}</a></li>
+                <li><a href="{{page('abc')->url()}}">{{page('abc')->seo->title}}</a></li>
+                <li><a href="{{page('cases')->url()}}">{{page('cases')->seo->title}}</a></li>
+                <li><a href="{{page('requests')->url()}}">{{page('requests')->seo->title}}</a></li>
             </ul>
             <div>
                 <img class="mr-2" alt="call" src="{{asset('img/icon/phone-call.svg')}}">
@@ -105,20 +116,20 @@
 <footer>
     <div class="container">
         <ul>
-            <li><a href="{{page('home')->url()}}">{{page('home','seoTitle')}}</a></li>
-            <li><a href="{{page('about')->url()}}">{{page('about','seoTitle')}}</a></li>
-            <li><a href="{{page('blog')->url()}}">{{page('blog','seoTitle')}}</a></li>
-            <li><a href="{{page('news')->url()}}">{{page('news','seoTitle')}}</a></li>
-            <li><a href="{{page('faq')->url()}}">{{page('faq','seoTitle')}}</a></li>
-            <li><a href="{{page('cases')->url()}}">{{page('cases','seoTitle')}}</a></li>
+            <li><a href="{{page('home')->url()}}">{{page('home')->seo->title}}</a></li>
+            <li><a href="{{page('about')->url()}}">{{page('about')->seo->title}}</a></li>
+            <li><a href="{{page('blog')->url()}}">{{page('blog')->seo->title}}</a></li>
+            <li><a href="{{page('news')->url()}}">{{page('news')->seo->title}}</a></li>
+            <li><a href="{{page('faq')->url()}}">{{page('faq')->seo->title}}</a></li>
+            <li><a href="{{page('cases')->url()}}">{{page('cases')->seo->title}}</a></li>
         </ul>
         <ul>
-            <li><a href="{{page('services')->url()}}">{{page('services','seoTitle')}}</a></li>
-            <li><a href="{{page('cases')->url()}}">{{page('cases','seoTitle')}}</a></li>
-            <li><a href="{{page('prices')->url()}}">{{page('prices','seoTitle')}}</a></li>
-            <li><a href="{{page('requests')->url()}}">{{page('requests','seoTitle')}}</a></li>
-            <li><a href="{{page('contacts')->url()}}">{{page('contacts','seoTitle')}}</a></li>
-            <li><a href="{{page('abc')->url()}}">{{page('abc','seoTitle')}}</a></li>
+            <li><a href="{{page('services')->url()}}">{{page('services')->seo->title}}</a></li>
+            <li><a href="{{page('cases')->url()}}">{{page('cases')->seo->title}}</a></li>
+            <li><a href="{{page('prices')->url()}}">{{page('prices')->seo->title}}</a></li>
+            <li><a href="{{page('requests')->url()}}">{{page('requests')->seo->title}}</a></li>
+            <li><a href="{{page('contacts')->url()}}">{{page('contacts')->seo->title}}</a></li>
+            <li><a href="{{page('abc')->url()}}">{{page('abc')->seo->title}}</a></li>
         </ul>
         <ul>
             <li><h2>Контакты</h2></li>
@@ -172,18 +183,21 @@
             </li>
         </ul>
         <ul>
-            <li><a class="logo" href="{{dynamicRoute('home')}}"><img src="{{asset('img/logo.svg')}}" alt="logo"></a></li>
+            <li><a class="logo" href="{{dynamicRoute('home')}}"><img src="{{asset('img/logo.svg')}}" alt="logo"></a>
+            </li>
             <li>
                 <button type="button" class="appButton appButton-block"
                         data-toggle="modal"
                         data-target="#modal"
-                        data-title="ЗАЯВКУ"
+                        data-title="{{page('submitApplication','title')}}"
+                        data-desc="{{page('submitApplication','body')}}"
+                        data-url="{{route('proposal.store')}}"
                         data-btn="Оставить заявку"
                         data-type="proposal">
-                    ОСТАВИТЬ ЗАЯвКУ
+                    ОСТАВИТЬ ЗАЯВКУ
                 </button>
             </li>
-            <li><p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p></li>
+            <li><p>{{Str::limit(strip_tags(page('submitApplication','body')),135)}}</p></li>
         </ul>
     </div>
 </footer>

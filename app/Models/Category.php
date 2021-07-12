@@ -26,15 +26,84 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Page[] $pages
+ * @property-read int|null $pages_count
+ * @property-read Category|null $parent
  */
 class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['parent_id', 'name', 'type'];
+    public $timestamps = false;
+    protected $fillable = ['parent_id', 'name'];
+
+    public function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id', 'id');
+    }
 
     public function children()
     {
-        return $this->hasMany(Category::class, 'parent_id');
+        return $this->hasMany(self::class, 'parent_id');
+    }
+
+    public function pages()
+    {
+        return $this->hasMany(Page::class);
+    }
+
+    public static function services()
+    {
+        return Page::whereHas('category.parent', function ($query) {
+            $query->where('parent_id', null);
+            $query->where('name', Page::SERVICES);
+        });
+    }
+
+    public static function abc()
+    {
+        return Page::whereHas('category.parent', function ($query) {
+            $query->where('parent_id', null);
+            $query->where('name', Page::ABC);
+        });
+    }
+
+    public static function cases()
+    {
+        return Page::whereHas('category.parent.parent', function ($query) {
+            $query->where('parent_id', null);
+            $query->where('name', Page::CASES);
+        });
+    }
+
+    public static function blog()
+    {
+        return Page::whereHas('category.parent.parent', function ($query) {
+            $query->where('parent_id', null);
+            $query->where('name', Page::BLOG);
+        });
+    }
+
+    public static function news()
+    {
+        return Page::whereHas('category.parent.parent', function ($query) {
+            $query->where('parent_id', null);
+            $query->where('name', Page::NEWS);
+        });
+    }
+
+    public static function requests()
+    {
+        return Page::whereHas('category', function ($query) {
+            $query->where('parent_id', null);
+            $query->where('name', Page::REQUESTS);
+        });
+    }
+    public static function writeDoctor()
+    {
+        return Page::whereHas('category', function ($query) {
+            $query->where('parent_id', null);
+            $query->where('name', Page::WRITE_DOCTOR);
+        });
     }
 }

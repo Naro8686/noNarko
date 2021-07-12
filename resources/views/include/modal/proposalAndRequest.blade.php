@@ -15,28 +15,26 @@
                 </button>
             </div>
             <div class="modal-body">
-                <h1 class="modal-title text-uppercase">ОСТАВИТЬ ЗАЯВКУ</h1>
-                <p class="modal-desc">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                    industry's standard dummy text.
-                </p>
-                <form>
-                    <div class="form-group">
+                <h1 class="modal-title text-uppercase"></h1>
+                <p class="modal-desc"></p>
+                <form action="#" method="POST">
+                    @csrf
+                    <div class="form-group position-relative">
                         <label class="w-100">
                             <input required type="text" class="form-control" placeholder="Ваше имя" name="name">
                         </label>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group position-relative">
                         <label class="w-100">
-                            <textarea required placeholder="Напишите свой отзыв" class="form-control"></textarea>
+                            <textarea required placeholder="Напишите свой отзыв" class="form-control" name="text"></textarea>
                         </label>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group position-relative">
                         <label class="w-100">
                             <input required type="tel" class="form-control" placeholder="Номер телефона" name="tel">
                         </label>
                     </div>
-                    <div class="form-group d-flex align-items-center">
+                    <div class="form-group d-flex align-items-center position-relative">
                         <input required type="checkbox" class="form-control" id="agree" name="agree">
                         <label for="agree" class="col-form-label">Я даю согласие на обработку моих данных</label>
                     </div>

@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\MetaRequest;
-use App\Models\Page;
+use App\Http\Requests\Admin\SeoRequest;
+use App\Models\Seo;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
-class MetaController extends Controller
+class SeoController extends Controller
 {
 
     public function index()
@@ -61,23 +62,16 @@ class MetaController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param MetaRequest $request
+     * @param SeoRequest $request
      * @param int $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
+     * @return RedirectResponse
      */
-    public function update(MetaRequest $request, int $id)
+    public function update(SeoRequest $request, int $id)
     {
-        $seo = $request->validated()['seo'];
-        $page = Page::findOrFail($id);
-        $page->update([
-            'slug' => $seo['slug'],
-            'seoTitle' => $seo['title'],
-            'seoDescription' => $seo['description'],
-            'seoKeywords' => $seo['keywords'],
-            'seoText' => $seo['text'],
-            'seoBody' => $seo['body']
-        ]);
-        return redirect()->route("admin.pages.$page->name")
+        $validate = $request->validated()['seo'];
+        $seo = Seo::findOrFail($id);
+        $seo->update($validate);
+        return redirect()->back()
             ->with('success', __('Action completed successfully'));
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PageRequest;
+use App\Models\Category;
 use App\Models\Contact;
 use App\Models\Page;
 use Illuminate\Http\Request;
@@ -28,7 +29,16 @@ class PagesController extends Controller
 
     public function __call($method, $parameters)
     {
-        return view('admin.pages.index');
+        $serviceCategories = Category::whereName(Page::SERVICES)
+            ->whereNull('parent_id')
+            ->whereHas('children')
+            ->firstOrNew();
+        $advantages = Category::whereName(Page::ADVANTAGE)
+            ->whereNull('parent_id')
+            ->whereHas('pages')
+            ->firstOrNew();
+
+        return view('admin.pages.index', compact('serviceCategories', 'advantages'));
     }
 
     public function contacts(Request $request)
@@ -70,6 +80,7 @@ class PagesController extends Controller
     {
         $page = Page::findOrFail($id);
         $validated = $request->validated()['page'];
+
         $validated['image'] = $page->image;
         if ($request->hasFile('page.file')) {
             $path = "img/pages/$page->name";
@@ -80,12 +91,26 @@ class PagesController extends Controller
             $validated['image'] = "$path/$name";
             $img->move(public_path($path), $name);
         }
-        $page->update([
+
+        if ($page->name !== "home") $page->update([
             'title' => $validated['title'],
             'image' => $validated['image'],
+            'desc' => $validated['desc'] ?? null,
             'body' => $validated['body']
         ]);
-        return redirect()->route("admin.pages.$page->name")
+        if (!is_null($page->seo)) {
+            $services = $page->services();
+            $advantages = $page->advantages();
+            $services->detach();
+            $advantages->detach();
+            if ($request->has('page.services')) {
+                $services->attach($validated['services']);
+            }
+            if ($request->has('page.advantages')) {
+                $advantages->attach($validated['advantages']);
+            }
+        }
+        return redirect()->back()
             ->with('success', __('Action completed successfully'));
     }
 }

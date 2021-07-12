@@ -11,7 +11,6 @@
 
     <title>Admin | {{ config('app.name', 'NoNarko') }}</title>
 
-
     <!-- Custom fonts for this template-->
     <link href="{{asset('css/admin/all.min.css')}}" rel="stylesheet" type="text/css">
     <link
@@ -23,6 +22,7 @@
 
     <!-- Custom styles for this page -->
     <link href="{{asset('css/admin/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
+    <link href="{{asset('css/admin/bootstrap-select.css')}}" rel="stylesheet">
     <link href="{{asset('css/admin/main.css')}}" rel="stylesheet">
     @stack('css')
 </head>
@@ -49,30 +49,24 @@
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span></a>
         </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-
-        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item @if(request()->routeIs('admin.proposal.*')) active @endif">
+            <a class="nav-link" href="{{route('admin.proposal.index')}}">
+                <i class="fas fa-fw fa-tasks"></i>
+                <span>{{__('Proposals')}}</span></a>
+        </li>
+        <li class="nav-item @if(request()->routeIs('admin.feedback.*')) active @endif">
+            <a class="nav-link" href="{{route('admin.feedback.index')}}">
+                <i class="fas fa-fw fa-comment"></i>
+                <span>{{__('Feedbacks')}}</span></a>
+        </li>
         <li class="nav-item @if(request()->routeIs('admin.slider.*')) active @endif">
-            <a class="nav-link @if(!request()->routeIs('admin.slider.*')) collapsed @endif" href="#"
-               data-toggle="collapse" data-target="#collapseTwo"
-               aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-fw fa-cog"></i>
-                <span>Интерфейс</span>
-            </a>
-            <div id="collapseTwo" class="collapse @if(request()->routeIs('admin.slider.*')) show @endif"
-                 aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item @if(request()->routeIs('admin.slider.*')) active @endif"
-                       href="{{route('admin.slider.index')}}">Слайдер</a>
-                </div>
-            </div>
+            <a class="nav-link" href="{{route('admin.slider.index')}}">
+                <i class="fas fa-fw fa-sliders-h"></i>
+                <span>{{__('Slider')}}</span></a>
         </li>
 
         <!-- Divider -->
         <hr class="sidebar-divider">
-
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item @if(request()->routeIs('admin.pages.*')) active @endif">
@@ -89,18 +83,48 @@
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">{{__('Main')}}:</h6>
-                    @foreach(pages()->where('slug','<>',null) as $page)
+                    @foreach(pages()->where('seo','<>',null) as $page)
                         <a class="collapse-item @if(request()->routeIs("admin.pages.$page->name")) active @endif"
-                           href="{{route("admin.pages.$page->name")}}">{{$page->seoTitle}}</a>
+                           href="{{route("admin.pages.$page->name")}}">{{$page->seo->title}}</a>
                     @endforeach
                     <div class="collapse-divider"></div>
                     <h6 class="collapse-header">{{__('Other')}}:</h6>
+                    <a class="collapse-item @if(request()->routeIs("admin.pages.ourServices")) active @endif"
+                       href="{{route("admin.pages.ourServices")}}">Наши услуги</a>
+                    <a class="collapse-item @if(request()->routeIs("admin.pages.submitApplication")) active @endif"
+                       href="{{route("admin.pages.submitApplication")}}">Оставить заявку</a>
+                    <a class="collapse-item @if(request()->routeIs("admin.pages.giveFeedback")) active @endif"
+                       href="{{route("admin.pages.giveFeedback")}}">Оставить отзыв</a>
+                    <a class="collapse-item @if(request()->routeIs("admin.pages.treatmentSteps")) active @endif"
+                       href="{{route("admin.pages.treatmentSteps")}}">Шаги лечения</a>
+                    <a class="collapse-item @if(request()->routeIs("admin.pages.advantage")) active @endif"
+                       href="{{route("admin.pages.advantage")}}">Преймущества</a>
                     <a class="collapse-item @if(request()->routeIs("admin.pages.error404")) active @endif"
                        href="{{route("admin.pages.error404")}}">404</a>
                 </div>
             </div>
         </li>
-
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+        @foreach([
+            'fas fa-fw fa-blog'=>\App\Models\Page::BLOG,
+            'fas fa-fw fa-newspaper'=>\App\Models\Page::NEWS,
+            'fas fa-fw fa-user-shield'=>\App\Models\Page::CASES,
+            'fas fa-fw fa-question'=>\App\Models\Page::FAQ,
+            'fas fa-fw fa-address-card'=>\App\Models\Page::REQUESTS,
+            'fas fa-fw fa-concierge-bell'=>\App\Models\Page::SERVICES,
+            'fas fa-fw fa-font'=>\App\Models\Page::ABC,
+            'fas fa-fw fa-balance-scale-right'=>\App\Models\Page::ADVANTAGE,
+            'fas fa-fw fa-notes-medical'=>\App\Models\Page::WRITE_DOCTOR,
+            'fas fa-fw fa-shoe-prints'=>\App\Models\Page::STEPS,
+        ] as $icon => $post)
+            <li class="nav-item @if(request()->routeIs("admin.$post.*")) active @endif">
+                <a class="nav-link" href="{{route("admin.$post.index")}}">
+                    <i class="{{$icon}}"></i>
+                    <span>{{__(ucfirst($post))}}</span>
+                </a>
+            </li>
+        @endforeach
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
 
@@ -246,6 +270,8 @@
 <!-- Bootstrap core JavaScript-->
 <script src="{{asset('js/admin/jquery.min.js')}}"></script>
 <script src="{{asset('js/admin/bootstrap.bundle.min.js')}}"></script>
+<script src="{{asset('js/admin/bootstrap-select.js')}}"></script>
+<script src="{{asset('js/admin/i18n/defaults-ru_RU.js')}}"></script>
 
 <!-- Core plugin JavaScript-->
 <script src="{{asset('js/admin/jquery.easing.min.js')}}"></script>

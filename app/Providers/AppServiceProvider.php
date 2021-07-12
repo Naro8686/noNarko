@@ -25,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        \Validator::extend('ru_phone_number', function ($attribute, $value, $parameters) {
+            return preg_match("%^((8|\+7)-?)?\(?\d{3}\)?-?\d-?\d-?\d-?\d-?\d-?\d-?\d$%u", $value);
+        });
     }
 }

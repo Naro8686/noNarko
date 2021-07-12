@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-foreach (pages()->where('slug', '<>', null) as $page) {
-    Route::get($page->slug, "HomeController@$page->name")->name($page->name);
-}
-
+Route::resource('/proposal', 'ProposalController')->only(['store']);
+Route::resource('/feedback', 'FeedbackController')->only(['store']);
+Route::get('/search', 'PagesController@search')->name('search');
 Auth::routes(['register' => false, 'verify' => true]);
+foreach (pages()->where('seo', '<>', null) as $page)
+    Route::get("/{$page->seo->slug}", "HomeController@$page->name")->name($page->name);
+Route::get('/{seo:slug}', 'PagesController@show')->where('seo', '^(?!admin).*$');

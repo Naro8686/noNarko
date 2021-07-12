@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 
-class MetaRequest extends FormRequest
+class SeoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,10 @@ class MetaRequest extends FormRequest
      */
     public function rules()
     {
-        $table = $this->has('seo.table') ? $this->input('seo.table') : 'pages';
         $id = (int)$this->input('seo.id');
         return [
-            "seo.slug" => ["required","regex:/^([a-z0-9\/\-\+\.\?&\*_#]+)$/i", "unique:$table,slug,$id", "max:255"],
-            "seo.title" => ["required", "unique:$table,title,$id", "max:255"],
+            "seo.slug" => ["required","regex:/^([a-z0-9\/\-\+\.\?&\*_#]+)$/i", "unique:seo,slug,$id", "max:255"],
+            "seo.title" => ["required", "max:255"],
             "seo.description" => ["nullable"],
             "seo.keywords" => ["nullable"],
             "seo.text" => ["nullable", "max:255"],
@@ -46,7 +45,7 @@ class MetaRequest extends FormRequest
         if ($this->has('seo.slug')) {
             $slug = trim($this->input('seo.slug'),'/');
             $request = $this->except('seo.slug');
-            $request['seo']['slug'] = "/$slug";
+            $request['seo']['slug'] = $slug;
             $this->merge([
                 "seo" => $request['seo'],
             ]);

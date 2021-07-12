@@ -2,9 +2,17 @@
 /public/hot
 /public/storage
 /public/img/slider/*
+/public/img/services/*
+/public/img/requests/*
+/public/img/news/*
+/public/img/cases/*
+/public/img/faq/*
+/public/img/blog/*
 /public/img/pages/about/*
+/public/img/pages/submitApplication/*
 !/public/img/slider/coworkers.svg
 !/public/img/pages/about/default.png
+!/public/img/pages/submitApplication/default.png
 /storage/*.key
 /storage/debugbar/*
 /vendor

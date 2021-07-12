@@ -1,28 +1,30 @@
 <div class="block-2">
-    <h2>Новости</h2>
-    <div class="block__item">
-        <img src="{{asset('img/dummy-image-350x250.gif')}}" data-src="{{asset('img/items/Rectangle.png')}}"
-             alt="">
-        <div>
-            <h3 class="text-uppercase">Лечение психики после употребления наркотиков</h3>
-            <hr>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                been the industry's Ipsum is simply dummy text of the </p>
-            <a href="{{route('news')}}">Читать полностью <i class="icon-right-orange d-lg-block d-none"></i></a>
+    @if(!is_null($lastNews))
+        <h2>Новости</h2>
+        <div class="block__item">
+            <img src="{{asset('img/dummy-image-350x250.gif')}}" data-src="{{asset($lastNews->image)}}"
+                 alt="">
+            <div>
+                <h3 class="text-uppercase">{{Str::limit($lastNews->title,58)}}</h3>
+                <hr>
+                <p>{{Str::limit(strip_tags($lastNews->body),150)}}</p>
+                <a href="{{url($lastNews->seo->slug)}}">Читать полностью <i class="icon-right-orange d-lg-block d-none"></i></a>
+            </div>
         </div>
-    </div>
-    <h2>Популярное в блоге</h2>
-    <div class="block__item">
-        <img src="{{asset('img/dummy-image-350x250.gif')}}" data-src="{{asset('img/items/Rectangle.png')}}"
-             alt="">
-        <div>
-            <h3 class="text-uppercase">Лечение психики после употребления наркотиков</h3>
-            <hr>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                been the industry's Ipsum is simply dummy text of the </p>
-            <a href="{{route('blog')}}">Читать полностью <i class="icon-right-orange d-lg-block d-none"></i></a>
+    @endif
+    @if(!is_null($lastBlog))
+        <h2>Популярное в блоге</h2>
+        <div class="block__item">
+            <img src="{{asset('img/dummy-image-350x250.gif')}}" data-src="{{asset($lastBlog->image)}}"
+                 alt="">
+            <div>
+                <h3 class="text-uppercase">{{Str::limit($lastBlog->title,58)}}</h3>
+                <hr>
+                <p>{{Str::limit(strip_tags($lastBlog->body),150)}}</p>
+                <a href="{{url($lastBlog->seo->slug)}}">Читать полностью <i class="icon-right-orange d-lg-block d-none"></i></a>
+            </div>
         </div>
-    </div>
+    @endif
     <h2>Мы в соц сетях</h2>
     <div class="social">
         @foreach($contacts->social as $key => $social)

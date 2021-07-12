@@ -40,29 +40,80 @@ use Illuminate\Support\Facades\Artisan;
  * @method static \Illuminate\Database\Eloquent\Builder|Page whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Page whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int|null $category_id
+ * @property string|null $desc
+ * @property-read \App\Models\Category|null $category
+ * @property-read \App\Models\Seo|null $seo
+ * @method static \Illuminate\Database\Eloquent\Builder|Page whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Page whereDesc($value)
+ * @property string|null $note
+ * @property string|null $price
+ * @property-read \Illuminate\Database\Eloquent\Collection|Page[] $posts
+ * @property-read int|null $posts_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Page whereNote($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Page wherePrice($value)
  */
 class Page extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug', 'title', 'body', 'image', 'seoTitle', 'seoDescription', 'seoKeywords', 'seoText', 'seoBody'];
+    const BASE = "pages";
+    const BLOG = "blog";
+    const NEWS = "news";
+    const SERVICES = "services";
+    const CASES = "cases";
+    const FAQ = "faq";
+    const ABC = "abc";
+    const REQUESTS = "requests";
+    const PRICES = "prices";
+    const ADVANTAGE = "advantage";
+    const WRITE_DOCTOR = "writeToDoctor";
+    const STEPS = "steps";
 
-    public function seo(): object
+    protected $fillable = ['category_id', 'name', 'title', 'note', 'price', 'desc', 'body', 'image'];
+
+    public function category()
     {
-        $seo = new \stdClass();
-        $seo->id = $this->id;
-        $seo->slug = $this->slug;
-        $seo->title = $this->seoTitle;
-        $seo->description = $this->seoDescription;
-        $seo->keywords = $this->seoKeywords;
-        $seo->text = $this->seoText;
-        $seo->body = $this->seoBody;
-        return $seo;
+        return $this->belongsTo(Category::class);
+    }
+
+    public function posts()
+    {
+        return $this->belongsToMany(self::class, 'page_posts', 'page_id', 'post_id');
+    }
+
+    public function advantages()
+    {
+        return $this->posts()->whereHas('category', function ($query) {
+            $query->where('parent_id', null);
+            $query->where('name', self::ADVANTAGE);
+        });
+    }
+
+    public function blog()
+    {
+        return $this->posts()->whereHas('category.parent.parent', function ($query) {
+            $query->where('parent_id', null);
+            $query->where('name', self::BLOG);
+        });
+    }
+
+    public function services()
+    {
+        return $this->posts()->whereHas('category.parent', function ($query) {
+            $query->where('parent_id', null);
+            $query->where('name', self::SERVICES);
+        });
+    }
+
+    public function seo(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Seo::class);
     }
 
     public function url()
     {
-        return url($this->slug ?? '/');
+        return $this->seo ? url($this->seo->slug) : url('/');
     }
 
     public function deleteImg()
@@ -78,7 +129,7 @@ class Page extends Model
     {
         static::updated(function (Page $page) {
             if ($page->isDirty()) {
-                Cache::forget("pages");
+                Cache::forget(self::BASE);
                 Artisan::call("route:clear");
             }
         });

@@ -5,5 +5,5 @@ $('#deleteItemModal').on('show.bs.modal', function (event) {
     modal.find('form').attr('action', url);
 });
 $(document).ready(function () {
-    bsCustomFileInput.init()
+    bsCustomFileInput.init();
 });

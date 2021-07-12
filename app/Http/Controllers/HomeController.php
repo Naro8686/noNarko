@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Contact;
 use App\Models\Page;
 use App\Models\Slider;
@@ -16,55 +17,120 @@ class HomeController extends Controller
         try {
             $this->page = page(\request()->route()->getName());
             if (!$this->page->exists) abort(404);
-        }catch (\Throwable $exception){
+        } catch (\Throwable $exception) {
             $this->page = new Page();
         }
         view()->share([
             'sliders' => Slider::get(),
             'contacts' => Contact::firstOrNew(),
-            'seo' => $this->page->seo(),
+            'seo' => $this->page->seo,
             'page' => $this->page
         ]);
     }
 
     public function home()
     {
-        return view('home');
+        $services = Category::services()->get();
+        $requests = Category::requests()->get();
+        $cases = Category::cases()->get();
+        $lastBlog = Category::blog()->latest()->first();
+        $lastNews = Category::news()->latest()->first();
+        $stepsCategory = Category::whereName(Page::STEPS)
+            ->whereNull('parent_id')->firstOrFail();
+
+        return view('home', [
+            'services' => $services,
+            'requests' => $requests,
+            'cases' => $cases,
+            'lastBlog' => $lastBlog,
+            'lastNews' => $lastNews,
+            'stepsCategory' => $stepsCategory->children,
+        ]);
     }
 
     public function about()
     {
-        return view('about');
+        $requests = Category::requests()->get();
+        $cases = Category::cases()->get();
+        $lastBlog = Category::blog()->latest()->first();
+        $lastNews = Category::news()->latest()->first();
+        return view('about', compact('cases', 'requests', 'lastNews', 'lastBlog'));
     }
 
     public function faq()
     {
-        return view('faq');
+        $category = Category::whereName(Page::FAQ)
+            ->whereNull('parent_id')->firstOrFail();
+        return view('faq', compact('category'));
     }
 
-    public function blog()
+    public function blog(Request $request)
     {
-        return view('blog');
+        $posts = Category::blog()->get();
+        if ($request->ajax()) {
+            if ($request->has('ids')) {
+                $posts = Category::blog()->whereIn('category_id', $request->get('ids'))->get();
+            }
+            $returnHTML = view('include.components.blog')->with(['posts' => $posts])->render();
+            return response()->json(['success' => true, 'html' => $returnHTML]);
+        }
+        $category = Category::whereName(Page::BLOG)
+            ->whereNull('parent_id')->firstOrFail();
+        return view('blog', compact('posts', 'category'));
     }
 
-    public function abc()
+    public function news(Request $request)
     {
-        return view('abc');
+        $posts = Category::news()->get();
+        if ($request->ajax()) {
+            if ($request->has('ids')) {
+                $posts = Category::news()->whereIn('category_id', $request->get('ids'))->get();
+            }
+            $returnHTML = view('include.components.news')->with(['posts' => $posts])->render();
+            return response()->json(['success' => true, 'html' => $returnHTML]);
+        }
+        $category = Category::whereName(Page::NEWS)
+            ->whereNull('parent_id')->firstOrFail();
+
+        return view('news', compact('posts', 'category'));
     }
 
-    public function news()
+    public function cases(Request $request)
     {
-        return view('news');
-    }
+        $posts = Category::cases()->get();
+        if ($request->ajax()) {
+            if ($request->has('ids')) {
+                $posts = Category::cases()->whereIn('category_id', $request->get('ids'))->get();
+            }
+            $returnHTML = view('include.components.cases')->with(['posts' => $posts])->render();
+            return response()->json(['success' => true, 'html' => $returnHTML]);
+        }
+        $category = Category::whereName(Page::CASES)
+            ->whereNull('parent_id')->firstOrFail();
 
-    public function services()
-    {
-        return view('services');
+        return view('cases', compact('posts', 'category'));
     }
 
     public function requests()
     {
-        return view('requests');
+        $requests = Category::requests()->get();
+        return view('requests', compact('requests'));
+    }
+
+    public function services()
+    {
+        $parentCategory = Category::whereName(Page::SERVICES)
+            ->whereNull('parent_id')->firstOrFail();
+        $service = Category::services()->first();
+        return view('services', ['parentCategory' => $parentCategory, 'service' => $service]);
+    }
+
+    public function abc()
+    {
+        $parentCategory = Category::whereName(Page::ABC)
+            ->whereNull('parent_id')->firstOrFail();
+        $abc = Category::abc()->first();
+        return view('abc', ['parentCategory' => $parentCategory, 'abc' => $abc]);
     }
 
     public function contacts()
@@ -72,23 +138,24 @@ class HomeController extends Controller
         return view('contacts');
     }
 
-    public function cases()
-    {
-        return view('cases');
-    }
-
     public function prices()
     {
-        return view('prices');
+        $category = Category::whereName(Page::SERVICES)
+            ->whereNull('parent_id')->firstOrFail();
+        return view('prices', ['categories' => $category->children]);
     }
 
     public function treatmentProgram()
     {
-        return view('treatmentProgram');
+        $stepsCategory = Category::whereName(Page::STEPS)
+            ->whereNull('parent_id')->firstOrFail();
+        $stepsCategory = $stepsCategory->children;
+        return view('treatmentProgram', compact('stepsCategory'));
     }
 
     public function writeToDoctor()
     {
-        return view('writeToDoctor');
+        $posts = Category::writeDoctor()->get();
+        return view('writeToDoctor', compact('posts'));
     }
 }

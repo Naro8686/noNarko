@@ -15,21 +15,21 @@ class CreatePagesTable extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-
-            $table->string('slug')->unique()->nullable();
-
+            $table->string('name')->unique()->nullable();
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->foreign('category_id')
+                ->references('id')
+                ->on('categories')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->string('title')->nullable();
+            $table->string('note')->nullable();
+            $table->string('price')->nullable();
             $table->mediumText('desc')->nullable();
-            $table->text('body')->nullable();
+            $table->longText('body')->nullable();
             $table->string('image')->nullable();
 
-            $table->string('seoTitle')->nullable();
-            $table->mediumText('seoDescription')->nullable();
-            $table->mediumText('seoKeywords')->nullable();
 
-            $table->string('seoText')->nullable();
-            $table->mediumText('seoBody')->nullable();
             $table->timestamps();
         });
     }

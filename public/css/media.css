@@ -440,6 +440,10 @@
 }
 
 @media only screen and (max-width: 768px) {
+    .th, .td {
+        width: auto;
+    }
+
     ul#faq > li a > .cross-item, .prices.container .cross-item {
         display: none;
     }
