@@ -1113,12 +1113,21 @@ svg.youtube:hover, svg.vk:hover {
 }
 
 .search-list {
+    /*visibility: visible;*/
     z-index: 1;
     position: absolute;
     max-height: 195px;
     width: 100%;
     overflow-y: scroll;
     left: 0;
+    /*opacity: 1;*/
+    /*transition: all 2s linear;*/
+    /*display: block;*/
+    /*transition: visibility 0s, opacity 0.5s linear;*/
+
+    transition: opacity 200ms linear;
+    transform:translate(0);
+    opacity: 1;
 }
 
 .menu-mobile > .dropdown-menu {
@@ -1132,8 +1141,10 @@ svg.youtube:hover, svg.vk:hover {
 }
 
 .search-list.close {
-    display: none;
-    z-index: 0;
+    /*opacity: 0;*/
+    /*z-index: 0;*/
+    transform:translate(9999px);
+    opacity: 0;
 }
 
 .all-services-block,

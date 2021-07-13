@@ -25,13 +25,17 @@ function pages()
 {
     $name = Page::BASE;
     return Cache::rememberForever($name, function () use ($name) {
-        $category = Category::whereName($name)
-            ->whereNull('parent_id')
-            ->whereHas('pages', function (Builder $query) {
-                $query->whereNotNull('name');
-            })
-            ->with(['pages', 'pages.seo'])
-            ->firstOrNew();
-        return $category->pages;
+        $pages = collect();
+        if (Schema::hasTable("categories")) {
+            $category = Category::whereName($name)
+                ->whereNull('parent_id')
+                ->whereHas('pages', function (Builder $query) {
+                    $query->whereNotNull('name');
+                })
+                ->with(['pages', 'pages.seo'])
+                ->firstOrNew();
+            $pages = $category->pages;
+        }
+        return $pages;
     });
 }

@@ -376,9 +376,8 @@
                 columnDefs: [{
                     orderable: false,
                     searchable: false,
-                    targets: [3]
+                    targets: -1
                 }],
-                //order: [[0, 'asc']]
             });
         });
     </script>

@@ -122,19 +122,24 @@ $(document).ready(function () {
                 }
             })
     });
+    let timer = null;
     $("input[name='q']").on("keyup", function () {
         let container = $('.search-list');
         let q = $.trim($(this).val().toLowerCase());
-        container.removeClass('close');
-        if (q.length) setTimeout(function () {
-            $.get('/search', {q: q})
+        if (!q.length) {
+            container.addClass('close');
+            return true;
+        }
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(function () {
+            container.removeClass('close');
+            if (q.length) $.get('/search', {q: q})
                 .done((data) => {
                     if (data.success) container.removeClass('close');
                     else container.addClass('close');
                     container.html(data.html);
-                })
+                });
         }, 500);
-        else container.addClass('close');
     });
 
     $(".abc-search input[name='search']").on("keyup", function () {

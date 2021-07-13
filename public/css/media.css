@@ -12,6 +12,7 @@
         border-radius: 5px;
         padding: 0px 52px;
         height: 100%;
+        min-width: 400px;
     }
 
     .proposal img {
